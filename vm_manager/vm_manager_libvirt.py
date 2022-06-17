@@ -78,15 +78,19 @@ def start(vm_name):
     logger.info("VM " + vm_name + " started")
 
 
-def stop(vm_name):
+def stop(vm_name, force=False):
     """
     Stop a VM
     :param vm_name: the VM to be stopped
+    :param force: Set to True to force stop (virtually unplug the VM)
     """
     with LibVirtManager() as lvm:
-        lvm.stop(vm_name)
-
-    logger.info("VM " + vm_name + " stopped")
+        if force:
+            lvm.force_stop(vm_name)
+            logger.info("Forced VM " + vm_name + " stop")
+        else:
+            lvm.stop(vm_name)
+            logger.info("VM " + vm_name + " stopped")
 
 
 def status(vm_name):
